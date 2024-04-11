@@ -2,17 +2,24 @@ import { HiUser } from "react-icons/hi";
 import { BsTelephoneFill } from "react-icons/bs";
 import css from "./Contact.module.css";
 import { useDispatch } from "react-redux";
-import { deleteContact } from "../../redux/contactsOps";
+import { deleteContact } from "../../redux/contacts/operations";
+import { useSelector } from "react-redux";
+import { selectError } from "../../redux/contacts/selectors";
+import toast from "react-hot-toast";
 
 export default function Contact({ contact }) {
   const dispatch = useDispatch();
+  const error = useSelector(selectError);
 
   if (!contact || Object.keys(contact).length === 0) {
     return null;
   }
-
+  const notify = () => toast.success("The contact is successfuly deleted");
   const handleDelete = () => {
     dispatch(deleteContact(contact.id));
+    if (!error) {
+      notify();
+    }
   };
 
   return (

@@ -2,7 +2,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import css from "./ContactForm.module.css";
-import { addContact } from "../../redux/contactsOps";
+import { addContact } from "../../redux/contacts/operations";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { selectError } from "../../redux/contacts/selectors";
+
 const contactValidationSchema = Yup.object().shape({
   username: Yup.string()
     .min(3, "Too short")
@@ -30,9 +34,14 @@ const SubmitButton = ({ label }) => (
 
 export default function ContactForm() {
   const dispatch = useDispatch();
+  const error = useSelector(selectError);
+  const notify = () => toast.success("The contact is successfuly added");
 
   const handleSubmit = (values, { resetForm }) => {
     dispatch(addContact({ name: values.username, number: values.usernumber }));
+    if (!error) {
+      notify();
+    }
     resetForm();
   };
 

@@ -1,29 +1,46 @@
-import ContactForm from "../ContactForm/ContactForm";
-import ContactList from "../ContactList/ContactList";
-import SearchBox from "../SearchBox/SearchBox";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import Layout from "../Layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAll } from "../../redux/contactsOps";
-import { Loader } from "../Loader/Loader";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import { selectError, selectLoading } from "../../redux/contactsSlice";
-import css from "./App.module.css";
+import { refreshUser } from "../../redux/auth/operations";
+import { selectIsRefreshing } from "../../redux/auth/selectors";
+import { RestrictedRoute } from "../RestrictedRoute";
+import { PrivateRoute } from "../PrivateRout";
+
+const HomePage = lazy(() => import("../../pages/Home/Home"));
+const RegisterPage = lazy(() => import("../../pages/Register/Register"));
+const LoginPage = lazy(() => import("../../pages/Login/Login"));
+const ContactsPage = lazy(() => import("../../pages/Contacts/Contacts"));
+
 export default function App() {
   const dispatch = useDispatch();
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-  useEffect(() => {
-    dispatch(fetchAll());
-  }, [dispatch]);
+  const isRefreshing = useSelector(selectIsRefreshing);
 
-  return (
-    <>
-      <p className={css.title}>Contacts Notebook</p>
-      <ContactForm />
-      <ContactList />
-      <SearchBox />
-      {loading && <Loader />}
-      {error && <ErrorMessage />}
-    </>
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
+  return isRefreshing ? (
+    <p>Refreshing user ....</p>
+  ) : (
+    <Layout>
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/register"
+            element={<RestrictedRoute component={<RegisterPage />} />}
+          />
+          <Route
+            path="/login"
+            element={<RestrictedRoute component={<LoginPage />} />}
+          ></Route>
+          <Route
+            path="/contacts"
+            element={<PrivateRoute component={<ContactsPage />} />}
+          ></Route>
+        </Routes>
+      </Suspense>
+      {/* <Toaster /> */}
+    </Layout>
   );
 }
