@@ -3,9 +3,6 @@ import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { logIn } from "../../redux/auth/operations";
 import css from "./LoginForm.module.css";
-import { useSelector } from "react-redux";
-import { selectErrorRegistration } from "../../redux/auth/selectors";
-import toast from "react-hot-toast";
 
 const contactValidationSchema = Yup.object().shape({
   password: Yup.string()
@@ -22,14 +19,10 @@ const contactValidationSchema = Yup.object().shape({
 
 export default function LoginForm() {
   const dispatch = useDispatch();
-  const error = useSelector(selectErrorRegistration);
 
-  const notify = () => toast.error(" Invalid email or password!");
   const handleSubmit = (values, actions) => {
     dispatch(logIn(values));
-    if (error) {
-      notify();
-    }
+
     actions.resetForm();
   };
 

@@ -1,4 +1,4 @@
-import css from "./ErrorMessageRegistratiom.module.css";
-export const ErrorMessage = () => {
-  return <p className={css.errorMessage}>Error! The review is not found</p>;
+import css from "./ErrorMessageRegistration.module.css";
+export const ErrorMessageRegistration = () => {
+  return <p className={css.errorMessage}>Error! The User already exists!</p>;
 };
