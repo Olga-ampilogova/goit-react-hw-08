@@ -10,7 +10,7 @@ const contactValidationSchema = Yup.object().shape({
     .max(50, "Too long")
     .required("Required"),
   password: Yup.string()
-    .min(2, "Too short")
+    .min(7, "Too short")
     .max(50, "Too long")
     .required("Required"),
   email: Yup.string()
