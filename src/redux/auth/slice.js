@@ -69,7 +69,6 @@ const authSlice = createSlice({
             state.error = false;
             state.isRefreshing = false;
         })
-}
-);
+});
 
 export default authSlice.reducer;

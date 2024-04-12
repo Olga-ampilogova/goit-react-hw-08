@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import PageTitle from "../../components/PageTitle/PageTitle";
-import css from "./Login.module.css";
+import css from "./LoginPage.module.css";
 
 export default function Login() {
   return (
